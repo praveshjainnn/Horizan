@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Visit Log - Horizon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --frost: rgba(255, 255, 255, 0.1);
+      --accent: #ffccd5;
+      --accent-dark: #ff9dad;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'General Sans', sans-serif;
+      background: url('https://c4.wallpaperflare.com/wallpaper/1009/341/320/silhouette-of-boat-on-sea-during-golden-hour-st-ives-st-ives-wallpaper-preview.jpg') no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      color: #fff;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 0;
+    }
+
+    .visit-container {
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 1.2rem;
+      padding: 2rem;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      animation: fadeIn 1s ease;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin: 0.8rem 0 0.3rem;
+      color: #fff;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 1rem;
+      backdrop-filter: blur(5px);
+      margin-bottom: 1rem;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #ddd;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--accent-dark);
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    button:hover {
+      background: var(--accent);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .visit-container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      input,
+      textarea {
+        font-size: 0.95rem;
+      }
+
+      button {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="visit-container">
+    <h1>📍 Visit Log</h1>
+    <form>
+      <label for="place">Place Name</label>
+      <input type="text" id="place" placeholder="E.g., Jaipur, India" />
+
+      <label for="date">Date of Visit</label>
+      <input type="date" id="date" />
+
+      <label for="notes">Your Experience</label>
+      <textarea id="notes" rows="5" placeholder="Write about the place, your safety, vibe, etc."></textarea>
+
+      <button type="submit">Save Visit</button>
+    </form>
+  </div>
+</body>
+</html>

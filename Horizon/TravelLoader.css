@@ -1,0 +1,24 @@
+/* TravelLoader.css */
+/* Ensures loader fills viewport and centers content */
+#travel-loader {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: #FAD4D4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.7s;
+  opacity: 1;
+}
+
+/* Progress ring is absolutely positioned below the animation */
+#travel-loader canvas {
+  pointer-events: none;
+}
+
+/* Customization tips:
+   - Adjust #travel-loader background for different themes
+   - Change transition duration for faster/slower fade
+   - Style the canvas for different progress ring looks
+*/ 

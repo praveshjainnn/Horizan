@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Alerts - Horizon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,600,700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-main: #D0D5CE;
+      --accent: #3C5759;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'General Sans', sans-serif;
+      min-height: 100vh;
+      background: url('https://images.unsplash.com/photo-1508264165352-258db2ebd59b') no-repeat center center/cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    header .icon {
+      width: 32px;
+      height: 32px;
+      stroke: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      margin-top: 0.3rem;
+      font-size: 1rem;
+      color: #ddd;
+    }
+
+    .alerts-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .alert-card {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      transition: 0.3s ease;
+    }
+
+    .alert-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .alert-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .alert-card .icon {
+      width: 20px;
+      height: 20px;
+      stroke: #fff;
+      flex-shrink: 0;
+    }
+
+    .alert-card p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: #eee;
+    }
+
+    .timestamp {
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+      color: #bbb;
+    }
+
+    .no-alerts {
+      text-align: center;
+      font-style: italic;
+      color: #ddd;
+      margin-top: 1rem;
+    }
+
+    .report-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      cursor: pointer;
+      z-index: 99;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .report-btn svg {
+      width: 28px;
+      height: 28px;
+      stroke: white;
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.6rem;
+      }
+
+      .alert-card {
+        padding: 1rem 1.2rem;
+      }
+
+      .report-btn {
+        width: 50px;
+        height: 50px;
+      }
+
+      .report-btn svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Bell Icon -->
+    <svg class="icon" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+      <path d="M15 17h5l-1.405-1.405C18.79 14.79 18 13.42 18 12V8a6 6 0 00-9.33-5" />
+      <path d="M6 8v4c0 1.42-.79 2.79-2.595 3.595L2 17h5m2 0v1a2 2 0 004 0v-1m-4 0h4" />
+    </svg>
+    <h1>Community Alerts</h1>
+    <p>Stay aware. Report concerns. Travel empowered.</p>
+  </header>
+
+  <div class="alerts-container" id="alertsContainer"></div>
+
+  <!-- Plus Button -->
+  <button class="report-btn" onclick="reportAlert()">
+    <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+      <path d="M12 5v14M5 12h14"/>
+    </svg>
+  </button>
+
+  <script>
+    function loadAlerts() {
+      const container = document.getElementById("alertsContainer");
+      const allCheckins = JSON.parse(localStorage.getItem("checkins") || "[]");
+
+      const alerts = allCheckins.filter(entry =>
+        entry.mood === "nervous" || entry.mood === "scared"
+      );
+
+      if (alerts.length === 0) {
+        container.innerHTML = '<p class="no-alerts">No alerts yet — all looks peaceful.</p>';
+        return;
+      }
+
+      alerts.reverse().forEach(alert => {
+        const card = document.createElement("div");
+        card.className = "alert-card";
+        card.innerHTML = `
+          <h3>
+            <svg class="icon" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+              <path d="M10.29 3.86L1.82 18a1 1 0 00.86 1.5h18.64a1 1 0 00.86-1.5L13.71 3.86a1 1 0 00-1.72 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            ${alert.location || "Unknown Area"}
+          </h3>
+          <p>${alert.note || "No note provided."}</p>
+          <div class="timestamp">${new Date(alert.timestamp).toLocaleString()}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function reportAlert() {
+      if (!navigator.geolocation) {
+        alert("Geolocation not supported.");
+        return;
+      }
+
+      const note = prompt("Briefly describe the safety concern:");
+      if (!note) return;
+
+      navigator.geolocation.getCurrentPosition(pos => {
+        const newAlert = {
+          mood: "scared",
+          note,
+          coords: {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          },
+          timestamp: new Date().toISOString(),
+          color: "red",
+          location: "User-reported area",
+        };
+
+        const stored = JSON.parse(localStorage.getItem("checkins") || "[]");
+        stored.push(newAlert);
+        localStorage.setItem("checkins", JSON.stringify(stored));
+        alert("✅ Alert submitted.");
+        location.reload();
+      });
+    }
+
+    loadAlerts();
+  </script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Horizon - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <style>
+    :root {
+      --accent: #ffccd5;
+      --accent-dark: #ff9dad;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'General Sans', sans-serif;
+      background: url('https://w0.peakpx.com/wallpaper/210/792/HD-wallpaper-nature-sunset-tree-forest.jpg') no-repeat center center/cover;
+      min-height: 100vh;
+      color: #fff;
+      padding: 1rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 0;
+    }
+
+    header {
+      z-index: 2;
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 1.2rem;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      max-width: 800px;
+      margin-inline: auto;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      color: #e0e0e0;
+      margin-top: 0.5rem;
+    }
+
+    .nav-buttons {
+      margin-top: 1.4rem;
+    }
+
+    .nav-buttons a {
+      background: #fff;
+      color: #222;
+      padding: 0.7rem 1.3rem;
+      margin: 0 0.5rem;
+      border-radius: 0.6rem;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .nav-buttons a:hover {
+      background-color: var(--accent-dark);
+      color: #fff;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.8rem;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      z-index: 1;
+      position: relative;
+    }
+
+    .home-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 1.2rem;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: #fff;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s ease forwards;
+    }
+
+    .home-card:nth-child(1) { animation-delay: 0.3s; }
+    .home-card:nth-child(2) { animation-delay: 0.4s; }
+    .home-card:nth-child(3) { animation-delay: 0.5s; }
+    .home-card:nth-child(4) { animation-delay: 0.6s; }
+    .home-card:nth-child(5) { animation-delay: 0.7s; }
+    .home-card:nth-child(6) { animation-delay: 0.8s; }
+    .home-card:nth-child(7) { animation-delay: 0.9s; }
+    .home-card:nth-child(8) { animation-delay: 1s; }
+    .home-card:nth-child(9) { animation-delay: 1.1s; }
+    .home-card:nth-child(10) { animation-delay: 1.2s; }
+
+    .home-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(255, 204, 213, 0.3);
+    }
+
+    .home-card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.4rem;
+      color: #fff;
+    }
+
+    .home-card p {
+      font-size: 0.95rem;
+      color: #e6e6e6;
+    }
+
+    footer {
+      z-index: 1;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #ccc;
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      color: var(--accent);
+    }
+
+    #splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: linear-gradient(to right, #ffc2c2, #fce4ec);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOut 1s ease forwards;
+      animation-delay: 1.8s;
+      flex-direction: column;
+    }
+
+    .splash-content {
+      text-align: center;
+      animation: popIn 0.8s ease;
+    }
+
+    .splash-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #2c2c2c;
+    }
+
+    .splash-content p {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    lottie-player {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 1rem;
+    }
+
+    .sos-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #fff;
+      color: #ff5252;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 10000;
+      box-shadow: 0 0 16px rgba(255, 82, 82, 0.4);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+    @keyframes popIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.6); }
+      50% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(255, 82, 82, 0); }
+    }
+
+    @media (max-width: 500px) {
+      header h1 { font-size: 2rem; }
+      .home-card { padding: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div id="splash">
+    <lottie-player
+      id="compass"
+      src="https://assets1.lottiefiles.com/packages/lf20_qp1q7mct.json"
+      background="transparent"
+      speed="1"
+      loop
+      autoplay>
+    </lottie-player>
+    <div class="splash-content">
+      <h1>🌅 Horizon</h1>
+      <p>Your safe-space for fearless solo travel ✨</p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <h1>🌅 Horizon</h1>
+    <p class="tagline">Your safe-space for fearless solo travel ✨</p>
+    <div class="nav-buttons">
+      <a href="Pages/login.html">Login</a>
+      <a href="Pages/signup.html">Sign Up</a>
+    </div>
+  </header>
+
+  <!-- Feature Cards -->
+  <section class="card-grid">
+    <a href="Pages/dashboard.html" class="home-card">
+      <h2>📊 Dashboard</h2>
+      <p>Your personalized travel safety and progress hub.</p>
+    </a>
+    <a href="Pages/map.html" class="home-card">
+      <h2>🗺️ Safety Map</h2>
+      <p>See real-time mood markers in your location.</p>
+    </a>
+    <a href="Pages/checkin.html" class="home-card">
+      <h2>📝 Mood Check-In</h2>
+      <p>Log your emotional state to track safety.</p>
+    </a>
+    <a href="Pages/safepath.html" class="home-card">
+      <h2>🚶‍♀️ Safe Routes</h2>
+      <p>Get safe route suggestions for solo journeys.</p>
+    </a>
+    <a href="Pages/alerts.html" class="home-card">
+      <h2>🚨 Alerts</h2>
+      <p>View nearby incident and safety alerts.</p>
+    </a>
+    <a href="Pages/visit.html" class="home-card">
+      <h2>📖 Visit Log</h2>
+      <p>Track places you've been and notes about them.</p>
+    </a>
+    <a href="Pages/packing.html" class="home-card">
+      <h2>🧳 Packing List</h2>
+      <p>Stay prepared with a customizable packing checklist.</p>
+    </a>
+    <a href="Pages/games.html" class="home-card">
+      <h2>🎮 Travel Games</h2>
+      <p>Play fun, light games to pass time on your journey.</p>
+    </a>
+    <a href="Pages/currency.html" class="home-card">
+      <h2>💱 Currency</h2>
+      <p>Convert currency quickly while traveling abroad.</p>
+    </a>
+    <a href="Pages/community.html" class="home-card">
+      <h2>🌍 Community</h2>
+      <p>Join solo travelers & share experiences globally.</p>
+    </a>
+    <div class="dashboard-row">
+      <div class="dashboard-card">
+        <span class="dashboard-icon">🆘</span>
+        <div>
+          <strong>Emergency Contacts</strong>
+          <p>Quickly access local and personal emergency numbers.</p>
+          <a href="Pages/emergency.html" class="dashboard-link">Open</a>
+        </div>
+      </div>
+      <div class="dashboard-card">
+        <span class="dashboard-icon">🈯</span>
+        <div>
+          <strong>Language Helper</strong>
+          <p>Essential phrases and instant translation for travelers.</p>
+          <a href="Pages/language.html" class="dashboard-link">Open</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <a href="Pages/dashboard.html">Dashboard</a>
+    <a href="Pages/map.html">Map</a>
+    <a href="Pages/checkin.html">Check-In</a>
+    <a href="Pages/safepath.html">Routes</a>
+    <a href="Pages/alerts.html">Alerts</a>
+    <a href="Pages/visit.html">Visit Log</a>
+    <a href="Pages/packing.html">Packing</a>
+    <a href="Pages/games.html">Games</a>
+    <a href="Pages/currency.html">Currency</a>
+    <a href="Pages/community.html">Community</a>
+  </footer>
+
+  <!-- SOS Button -->
+  <button class="sos-btn" onclick="alert('🚨 SOS Triggered! Help is on the way.')">SOS</button>
+
+  <script>
+    setTimeout(() => {
+      const splash = document.getElementById('splash');
+      if (splash) splash.remove();
+    }, 2500);
+
+    window.addEventListener('deviceorientation', (event) => {
+      const compass = document.getElementById('compass');
+      if (!compass || typeof event.alpha !== 'number') return;
+      compass.style.transform = `rotate(${event.alpha}deg)`;
+    });
+  </script>
+</body>
+</html>

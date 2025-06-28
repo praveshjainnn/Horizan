@@ -1,0 +1,650 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Travel Games - Horizon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #3C5759;
+      --glass-bg: rgba(255, 255, 255, 0.2);
+      --glass-border: rgba(255, 255, 255, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'General Sans', sans-serif;
+      background: url('https://images.pexels.com/photos/2331884/pexels-photo-2331884.jpeg?cs=srgb&dl=pexels-timmossholder-2331884.jpg&fm=jpg') no-repeat center center/cover;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .games-hero {
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .games-hero h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+    }
+
+    .games-hero p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .game-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .game-tab {
+      padding: 0.6rem 1rem;
+      border: 2px solid transparent;
+      background: var(--glass-bg);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .game-tab.active {
+      border-color: white;
+      background: rgba(255,255,255,0.35);
+      transform: scale(1.05);
+    }
+
+    .game-section {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 2rem;
+      border-radius: 1.2rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      max-width: 500px;
+      width: 100%;
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+      display: none;
+    }
+
+    .game-section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .game-section h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .game-question {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .game-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .game-options button,
+    .game-section button {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      font-weight: 600;
+      padding: 0.8rem 1.2rem;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 0.8rem;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+      margin-top: 0.5rem;
+    }
+
+    .game-options button:hover,
+    .game-section button:hover {
+      background: rgba(255,255,255,0.35);
+      transform: scale(1.05);
+    }
+
+    .game-feedback {
+      margin-top: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .leaderboard {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255,255,255,0.4);
+      max-width: 360px;
+      text-align: center;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .more-games {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: white;
+      opacity: 0.8;
+    }
+
+    #soundToggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    #soundToggle:hover {
+      background: rgba(255,255,255,0.35);
+    }
+
+    @media (max-width: 600px) {
+      .game-section {
+        padding: 1.2rem 1rem;
+      }
+
+      .games-hero h1 {
+        font-size: 1.6rem;
+      }
+
+      .game-tab {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="games-hero">
+    <h1>🎮 Travel Games</h1>
+    <p>Test your travel knowledge and have fun while you wait or explore!</p>
+  </div>
+
+  <!-- 🔊 Sound Toggle Button with SVG Icon -->
+  <button id="soundToggle" title="Toggle sound">
+    <svg id="soundIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white" viewBox="0 0 24 24">
+      <path d="M5 9v6h4l5 5V4l-5 5H5z"/>
+    </svg>
+  </button>
+
+  <!-- Game Tabs -->
+  <div class="game-tabs">
+    <button class="game-tab active" data-tab="geoguess">🌍 GeoGuess</button>
+    <button class="game-tab" data-tab="quiz">❓ Travel Quiz</button>
+    <button class="game-tab" data-tab="packing">🧳 Packing Challenge</button>
+    <button class="game-tab" data-tab="memory">🧠 Memory Game</button>
+  </div>
+
+  <!-- Game Sections -->
+  <div class="game-section active" id="geoguess-section">
+    <h2>GeoGuess Mini</h2>
+    <div class="game-question" id="geo-question">Loading...</div>
+    <div class="game-options" id="geo-options"></div>
+    <div class="game-feedback" id="geo-feedback"></div>
+    <button onclick="nextGeoGuess()">Next</button>
+  </div>
+
+  <div class="game-section" id="quiz-section">
+    <h2>Travel Quiz</h2>
+    <div class="game-question" id="quiz-question">Loading...</div>
+    <div class="game-options" id="quiz-options"></div>
+    <div class="game-feedback" id="quiz-feedback"></div>
+    <button onclick="nextQuiz()">Next</button>
+  </div>
+
+  <div class="game-section" id="packing-section">
+    <h2>Packing Challenge</h2>
+    <div class="game-question">Select the right items for a trip to <span id="packing-destination">Paris</span>:</div>
+    <div class="game-options" id="packing-options"></div>
+    <div class="game-feedback" id="packing-feedback"></div>
+    <button onclick="nextPacking()">Next</button>
+  </div>
+
+  <div class="game-section" id="memory-section">
+    <h2>Memory Game</h2>
+    <div class="game-question">Find all the matching travel icons!</div>
+    <div id="memory-board" style="display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;"></div>
+    <div class="game-feedback" id="memory-feedback"></div>
+    <button onclick="resetMemory()">Restart</button>
+  </div>
+
+  <div class="leaderboard" id="leaderboard">
+    <strong>🏆 Leaderboard (Local)</strong>
+    <div id="leaderboard-content">Play games to see your scores here!</div>
+  </div>
+
+  <div class="more-games">More games and features coming soon!</div>
+
+  <!-- External JS Logic -->
+  <script>
+    // Sound Logic
+    let soundOn = true;
+    const correctSound = new Audio('https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae5b2.mp3');
+    const wrongSound = new Audio('https://cdn.pixabay.com/audio/2022/07/26/audio_12b6b1b2b2.mp3');
+    document.getElementById('soundToggle').onclick = function () {
+      soundOn = !soundOn;
+      const icon = document.getElementById('soundIcon');
+      icon.innerHTML = soundOn
+        ? '<path d="M5 9v6h4l5 5V4l-5 5H5z"/>'
+        : '<path d="M16.5 12l5-5-1.5-1.5-5 5-5-5-1.5 1.5 5 5-5 5 1.5 1.5 5-5 5 5 1.5-1.5-5-5z"/>';
+    };
+    function playCorrect() { if (soundOn) correctSound.play(); }
+    function playWrong() { if (soundOn) wrongSound.play(); }
+
+    // Tab Logic
+    document.querySelectorAll('.game-tab').forEach(tab => {
+      tab.onclick = function () {
+        console.log('Tab clicked:', this.dataset.tab);
+        document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.game-section').forEach(sec => sec.classList.remove('active'));
+        const targetSection = document.getElementById(this.dataset.tab + '-section');
+        if (targetSection) {
+          targetSection.classList.add('active');
+          console.log('Activated section:', this.dataset.tab + '-section');
+        } else {
+          console.error('Section not found:', this.dataset.tab + '-section');
+        }
+      };
+    });
+
+    // Game State
+    let currentScores = {
+      geoguess: 0,
+      quiz: 0,
+      packing: 0,
+      memory: 0
+    };
+
+    // GeoGuess Game
+    const geoQuestions = [
+      {
+        question: "Which country is known for the Great Wall?",
+        options: ["Japan", "China", "Korea", "Vietnam"],
+        correct: 1
+      },
+      {
+        question: "The Eiffel Tower is located in which city?",
+        options: ["London", "Berlin", "Paris", "Rome"],
+        correct: 2
+      },
+      {
+        question: "Which country is home to the ancient pyramids?",
+        options: ["Greece", "Egypt", "Turkey", "Morocco"],
+        correct: 1
+      },
+      {
+        question: "The Statue of Liberty is in which city?",
+        options: ["Los Angeles", "Chicago", "New York", "Boston"],
+        correct: 2
+      },
+      {
+        question: "Which country is famous for tulips and windmills?",
+        options: ["Belgium", "Netherlands", "Denmark", "Sweden"],
+        correct: 1
+      }
+    ];
+
+    let currentGeoIndex = 0;
+
+    function loadGeoGuess() {
+      if (currentGeoIndex >= geoQuestions.length) {
+        currentGeoIndex = 0;
+      }
+      const question = geoQuestions[currentGeoIndex];
+      document.getElementById('geo-question').textContent = question.question;
+      
+      const optionsDiv = document.getElementById('geo-options');
+      optionsDiv.innerHTML = '';
+      
+      question.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.onclick = () => selectGeoAnswer(index);
+        optionsDiv.appendChild(button);
+      });
+      
+      document.getElementById('geo-feedback').textContent = '';
+    }
+
+    function selectGeoAnswer(selectedIndex) {
+      const question = geoQuestions[currentGeoIndex];
+      const feedback = document.getElementById('geo-feedback');
+      
+      if (selectedIndex === question.correct) {
+        feedback.textContent = '✅ Correct! Well done!';
+        feedback.style.color = '#4ade80';
+        currentScores.geoguess += 10;
+        playCorrect();
+      } else {
+        feedback.textContent = `❌ Wrong! The correct answer is: ${question.options[question.correct]}`;
+        feedback.style.color = '#f87171';
+        playWrong();
+      }
+      
+      updateLeaderboard();
+    }
+
+    function nextGeoGuess() {
+      currentGeoIndex++;
+      loadGeoGuess();
+    }
+
+    // Travel Quiz Game
+    const quizQuestions = [
+      {
+        question: "What is the capital of Australia?",
+        options: ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+        correct: 2
+      },
+      {
+        question: "Which currency is used in Japan?",
+        options: ["Won", "Yen", "Ringgit", "Baht"],
+        correct: 1
+      },
+      {
+        question: "What is the largest desert in the world?",
+        options: ["Sahara", "Arabian", "Gobi", "Antarctic"],
+        correct: 0
+      },
+      {
+        question: "Which country has the most time zones?",
+        options: ["Russia", "USA", "France", "Canada"],
+        correct: 2
+      },
+      {
+        question: "What is the official language of Brazil?",
+        options: ["Spanish", "Portuguese", "French", "English"],
+        correct: 1
+      }
+    ];
+
+    let currentQuizIndex = 0;
+
+    function loadQuiz() {
+      console.log('Loading quiz, current index:', currentQuizIndex);
+      if (currentQuizIndex >= quizQuestions.length) {
+        currentQuizIndex = 0;
+      }
+      const question = quizQuestions[currentQuizIndex];
+      document.getElementById('quiz-question').textContent = question.question;
+      
+      const optionsDiv = document.getElementById('quiz-options');
+      optionsDiv.innerHTML = '';
+      
+      question.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.onclick = () => selectQuizAnswer(index);
+        optionsDiv.appendChild(button);
+      });
+      
+      document.getElementById('quiz-feedback').textContent = '';
+      console.log('Quiz loaded successfully');
+    }
+
+    function selectQuizAnswer(selectedIndex) {
+      const question = quizQuestions[currentQuizIndex];
+      const feedback = document.getElementById('quiz-feedback');
+      
+      if (selectedIndex === question.correct) {
+        feedback.textContent = '✅ Correct! Great knowledge!';
+        feedback.style.color = '#4ade80';
+        currentScores.quiz += 10;
+        playCorrect();
+      } else {
+        feedback.textContent = `❌ Wrong! The correct answer is: ${question.options[question.correct]}`;
+        feedback.style.color = '#f87171';
+        playWrong();
+      }
+      
+      updateLeaderboard();
+    }
+
+    function nextQuiz() {
+      currentQuizIndex++;
+      loadQuiz();
+    }
+
+    // Packing Challenge Game
+    const packingChallenges = [
+      {
+        destination: "Paris",
+        correct: ["Passport", "Camera", "Comfortable shoes", "Travel adapter"],
+        incorrect: ["Beach towel", "Ski equipment", "Snorkel gear", "Winter coat"]
+      },
+      {
+        destination: "Tokyo",
+        correct: ["Passport", "Pocket WiFi", "Comfortable walking shoes", "Cash"],
+        incorrect: ["Beach umbrella", "Ski jacket", "Snorkel", "Heavy winter clothes"]
+      },
+      {
+        destination: "Sydney",
+        correct: ["Passport", "Sunscreen", "Swimsuit", "Light clothes"],
+        incorrect: ["Winter coat", "Ski equipment", "Heavy boots", "Warm scarf"]
+      },
+      {
+        destination: "New York",
+        correct: ["Passport", "Comfortable shoes", "Camera", "Metro card"],
+        incorrect: ["Beach towel", "Snorkel gear", "Ski equipment", "Tropical clothes"]
+      }
+    ];
+
+    let currentPackingIndex = 0;
+
+    function loadPacking() {
+      console.log('Loading packing challenge, current index:', currentPackingIndex);
+      if (currentPackingIndex >= packingChallenges.length) {
+        currentPackingIndex = 0;
+      }
+      const challenge = packingChallenges[currentPackingIndex];
+      document.getElementById('packing-destination').textContent = challenge.destination;
+      
+      const optionsDiv = document.getElementById('packing-options');
+      optionsDiv.innerHTML = '';
+      
+      const allItems = [...challenge.correct, ...challenge.incorrect];
+      const shuffledItems = allItems.sort(() => Math.random() - 0.5);
+      
+      shuffledItems.forEach(item => {
+        const button = document.createElement('button');
+        button.textContent = item;
+        button.onclick = () => selectPackingItem(item, challenge);
+        optionsDiv.appendChild(button);
+      });
+      
+      document.getElementById('packing-feedback').textContent = '';
+      console.log('Packing challenge loaded successfully');
+    }
+
+    function selectPackingItem(item, challenge) {
+      const feedback = document.getElementById('packing-feedback');
+      
+      if (challenge.correct.includes(item)) {
+        feedback.textContent = `✅ Good choice! ${item} is perfect for ${challenge.destination}!`;
+        feedback.style.color = '#4ade80';
+        currentScores.packing += 5;
+        playCorrect();
+      } else {
+        feedback.textContent = `❌ ${item} might not be the best choice for ${challenge.destination}.`;
+        feedback.style.color = '#f87171';
+        playWrong();
+      }
+      
+      updateLeaderboard();
+    }
+
+    function nextPacking() {
+      currentPackingIndex++;
+      loadPacking();
+    }
+
+    // Memory Game
+    const memoryIcons = ['✈️', '🏖️', '🗺️', '🏛️', '🌍', '🎒', '📷', '🏨'];
+    let memoryCards = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let canFlip = true;
+
+    function initializeMemory() {
+      console.log('Initializing memory game...');
+      memoryCards = [...memoryIcons, ...memoryIcons].sort(() => Math.random() - 0.5);
+      flippedCards = [];
+      matchedPairs = 0;
+      canFlip = true;
+      
+      const board = document.getElementById('memory-board');
+      board.innerHTML = '';
+      
+      memoryCards.forEach((icon, index) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.index = index;
+        card.dataset.icon = icon;
+        card.style.cssText = `
+          width: 60px;
+          height: 60px;
+          background: rgba(255,255,255,0.2);
+          border: 2px solid rgba(255,255,255,0.3);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        `;
+        card.textContent = '❓';
+        card.onclick = () => flipCard(card);
+        board.appendChild(card);
+      });
+      
+      document.getElementById('memory-feedback').textContent = '';
+      console.log('Memory game initialized successfully');
+    }
+
+    function flipCard(card) {
+      if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) {
+        return;
+      }
+      
+      card.classList.add('flipped');
+      card.textContent = card.dataset.icon;
+      card.style.background = 'rgba(255,255,255,0.4)';
+      
+      flippedCards.push(card);
+      
+      if (flippedCards.length === 2) {
+        canFlip = false;
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      const [card1, card2] = flippedCards;
+      
+      if (card1.dataset.icon === card2.dataset.icon) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        card1.style.background = 'rgba(74, 222, 128, 0.4)';
+        card2.style.background = 'rgba(74, 222, 128, 0.4)';
+        matchedPairs++;
+        currentScores.memory += 10;
+        playCorrect();
+        
+        if (matchedPairs === memoryIcons.length) {
+          document.getElementById('memory-feedback').textContent = '🎉 Congratulations! You completed the memory game!';
+          document.getElementById('memory-feedback').style.color = '#4ade80';
+        }
+      } else {
+        setTimeout(() => {
+          card1.classList.remove('flipped');
+          card2.classList.remove('flipped');
+          card1.textContent = '❓';
+          card2.textContent = '❓';
+          card1.style.background = 'rgba(255,255,255,0.2)';
+          card2.style.background = 'rgba(255,255,255,0.2)';
+        }, 1000);
+        playWrong();
+      }
+      
+      flippedCards = [];
+      canFlip = true;
+      updateLeaderboard();
+    }
+
+    function resetMemory() {
+      initializeMemory();
+    }
+
+    // Leaderboard
+    function updateLeaderboard() {
+      const totalScore = Object.values(currentScores).reduce((sum, score) => sum + score, 0);
+      const leaderboardContent = document.getElementById('leaderboard-content');
+      
+      leaderboardContent.innerHTML = `
+        <div style="margin: 10px 0;">
+          <div>🌍 GeoGuess: ${currentScores.geoguess}</div>
+          <div>❓ Travel Quiz: ${currentScores.quiz}</div>
+          <div>🧳 Packing: ${currentScores.packing}</div>
+          <div>🧠 Memory: ${currentScores.memory}</div>
+          <div style="margin-top: 10px; font-weight: bold; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 10px;">
+            🏆 Total Score: ${totalScore}
+          </div>
+        </div>
+      `;
+    }
+
+    // Initialize all games when page loads
+    window.onload = function() {
+      console.log('Page loaded, initializing games...');
+      loadGeoGuess();
+      loadQuiz();
+      loadPacking();
+      initializeMemory();
+      updateLeaderboard();
+      console.log('All games initialized');
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mood Check-In - Horizon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <style>
+    :root {
+      --accent: #3C5759;
+      --glass-bg: rgba(255, 255, 255, 0.2);
+      --glass-border: rgba(255, 255, 255, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'General Sans', sans-serif;
+      background: url('https://images.pexels.com/photos/2331884/pexels-photo-2331884.jpeg?cs=srgb&dl=pexels-timmossholder-2331884.jpg&fm=jpghttps://c4.wallpaperflare.com/wallpaper/559/982/570/fall-trees-nature-mountains-wallpaper-preview.jpg') no-repeat center center/cover;
+      color: #2c2c2c;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+
+    form {
+      backdrop-filter: blur(20px);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 500px;
+      color: white;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    textarea {
+      padding: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 1rem;
+      resize: none;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .mood-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .mood-btn {
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid transparent;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .mood-btn svg {
+      width: 28px;
+      height: 28px;
+      stroke: white;
+    }
+
+    .mood-btn.selected {
+      background: rgba(255,255,255,0.35);
+      border-color: white;
+      transform: scale(1.07);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+    }
+
+    button[type="submit"] {
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem;
+      border: none;
+      border-radius: 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background: #2a3f41;
+    }
+
+    .note {
+      text-align: center;
+      font-size: 0.85rem;
+      color: white;
+      margin-top: 1rem;
+    }
+
+    .lottie-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: white;
+      text-align: center;
+      z-index: 999;
+    }
+
+    .lottie-overlay.show {
+      display: flex;
+    }
+
+    .lottie-overlay p {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Mood Check-In</h1>
+  </header>
+
+  <form id="checkin-form">
+    <label for="mood">How are you feeling?</label>
+    <div class="mood-options">
+      <button type="button" class="mood-btn" data-mood="happy" title="Happy">
+        <svg fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+          <path d="M9 9h.01M15 9h.01"/>
+        </svg>
+      </button>
+      <button type="button" class="mood-btn" data-mood="neutral" title="Neutral">
+        <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="8" y1="15" x2="16" y2="15"/>
+          <path d="M9 9h.01M15 9h.01"/>
+        </svg>
+      </button>
+      <button type="button" class="mood-btn" data-mood="nervous" title="Nervous">
+        <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 15s1.5-2 4-2 4 2 4 2"/>
+          <path d="M9 9h.01M15 9h.01"/>
+        </svg>
+      </button>
+      <button type="button" class="mood-btn" data-mood="scared" title="Scared">
+        <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9 15c1.5-1.5 4.5-1.5 6 0"/>
+          <path d="M9 9h.01M15 9h.01"/>
+        </svg>
+      </button>
+    </div>
+
+    <label for="note">Add an optional note</label>
+    <textarea id="note" rows="4" placeholder="Describe why you're feeling this way..."></textarea>
+
+    <button type="submit">Submit Check-In</button>
+  </form>
+
+  <p class="note">Your mood helps others travel safely.</p>
+
+  <!-- Lottie Success Overlay -->
+  <div class="lottie-overlay" id="lottieSuccess">
+    <lottie-player
+      src="https://lottie.host/93934832-7b42-4291-8f15-7ee6aee5f9c6/rRg1W7U9Ks.json"
+      background="transparent"
+      speed="1"
+      style="width: 250px; height: 250px"
+      autoplay
+    ></lottie-player>
+    <p>Check-in saved! Redirecting to map...</p>
+  </div>
+
+  <script>
+    let selectedMood = null;
+    const moodButtons = document.querySelectorAll('.mood-btn');
+
+    moodButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        moodButtons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedMood = btn.dataset.mood;
+      });
+    });
+
+    document.getElementById('checkin-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const note = document.getElementById('note').value;
+
+      if (!selectedMood) {
+        alert("Please select a mood!");
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        alert("Location not supported.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(position => {
+        const data = {
+          mood: selectedMood,
+          note: note,
+          coords: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          },
+          timestamp: new Date().toISOString(),
+          color: selectedMood === 'happy' ? 'green' :
+                 selectedMood === 'neutral' ? 'yellow' :
+                 'red',
+          location: 'Your Location'
+        };
+
+        const existing = JSON.parse(localStorage.getItem('checkins') || '[]');
+        existing.push(data);
+        localStorage.setItem('checkins', JSON.stringify(existing));
+
+        document.getElementById("lottieSuccess").classList.add("show");
+        setTimeout(() => window.location.href = "map.html", 2500);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Language Helper - Horizon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --glass: rgba(255, 255, 255, 0.1);
+      --glass-dark: rgba(255, 255, 255, 0.05);
+      --highlight: #ffcdd2;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'General Sans', sans-serif;
+      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9U7xNYCQ3TLYnDseDGkW8-IyPyDpLCOccxrYC_6i9EdhaXYGaq8O-pzQWQOWeGVFFvKU&usqp=CAU') no-repeat center center/cover;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(20px);
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 1.2rem;
+      padding: 2rem;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1.2rem;
+      text-decoration: none;
+      color: var(--highlight);
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    .controls {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    input[type="text"], select {
+      padding: 0.7rem 1rem;
+      border-radius: 0.6rem;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      width: 100%;
+      background: var(--glass-dark);
+      color: black;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: var(--glass-dark);
+      border-radius: 0.6rem;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      font-size: 1rem;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    td {
+      background: rgba(255, 255, 255, 0.08);
+      color: #f2f2f2;
+    }
+
+    .speak-btn {
+      background: #ffcdd2;
+      color: #222;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: background 0.3s;
+    }
+
+    .speak-btn:hover {
+      background: #ff9ea8;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+      th, td { font-size: 0.9rem; }
+      .container { padding: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../index.html" class="back-link">← Back to Dashboard</a>
+    <h1>🈯 Language Helper</h1>
+
+    <!-- Controls -->
+    <div class="controls">
+      <input type="text" id="search" placeholder="🔍 Search a phrase..." oninput="filterTable()" />
+      <select id="langSelect" onchange="changeLanguage()">
+        <option value="spanish">Spanish</option>
+        <option value="french">French</option>
+        <option value="hindi">Hindi</option>
+      </select>
+    </div>
+
+    <!-- Phrase Table -->
+    <table id="phraseTable">
+      <thead>
+        <tr><th>English</th><th id="langCol">Spanish</th><th>Speak</th></tr>
+      </thead>
+      <tbody id="phraseBody">
+        <tr><td>Hello</td><td>Hola</td><td><button class="speak-btn" onclick="speak('Hola')">🔈</button></td></tr>
+        <tr><td>Thank you</td><td>Gracias</td><td><button class="speak-btn" onclick="speak('Gracias')">🔈</button></td></tr>
+        <tr><td>Where is the hospital?</td><td>¿Dónde está el hospital?</td><td><button class="speak-btn" onclick="speak('¿Dónde está el hospital?')">🔈</button></td></tr>
+        <tr><td>I need help</td><td>Necesito ayuda</td><td><button class="speak-btn" onclick="speak('Necesito ayuda')">🔈</button></td></tr>
+        <tr><td>How much does it cost?</td><td>¿Cuánto cuesta?</td><td><button class="speak-btn" onclick="speak('¿Cuánto cuesta?')">🔈</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const phrases = {
+      spanish: [
+        ['Hello', 'Hola'],
+        ['Thank you', 'Gracias'],
+        ['Where is the hospital?', '¿Dónde está el hospital?'],
+        ['I need help', 'Necesito ayuda'],
+        ['How much does it cost?', '¿Cuánto cuesta?']
+      ],
+      french: [
+        ['Hello', 'Bonjour'],
+        ['Thank you', 'Merci'],
+        ['Where is the hospital?', "Où est l'hôpital ?"],
+        ['I need help', "J'ai besoin d'aide"],
+        ['How much does it cost?', 'Combien ça coûte ?']
+      ],
+      hindi: [
+        ['Hello', 'नमस्ते'],
+        ['Thank you', 'धन्यवाद'],
+        ['Where is the hospital?', 'अस्पताल कहाँ है?'],
+        ['I need help', 'मुझे मदद चाहिए'],
+        ['How much does it cost?', 'यह कितने का है?']
+      ]
+    };
+
+    function changeLanguage() {
+      const lang = document.getElementById('langSelect').value;
+      const body = document.getElementById('phraseBody');
+      const langCol = document.getElementById('langCol');
+      langCol.innerText = lang.charAt(0).toUpperCase() + lang.slice(1);
+
+      body.innerHTML = '';
+      phrases[lang].forEach(([eng, trans]) => {
+        body.innerHTML += `
+          <tr>
+            <td>${eng}</td>
+            <td>${trans}</td>
+            <td><button class="speak-btn" onclick="speak('${trans.replace(/'/g, "\\'")}')">🔈</button></td>
+          </tr>`;
+      });
+    }
+
+    function filterTable() {
+      const input = document.getElementById('search').value.toLowerCase();
+      const rows = document.querySelectorAll('#phraseBody tr');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(input) ? '' : 'none';
+      });
+    }
+
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        speechSynthesis.speak(utterance);
+      } else {
+        alert('Speech synthesis not supported on your browser.');
+      }
+    }
+  </script>
+</body>
+</html>

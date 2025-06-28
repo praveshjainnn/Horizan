@@ -1,0 +1,20 @@
+[
+  {
+    "location": "Green Street",
+    "mood": "Peaceful",
+    "color": "green",
+    "coords": [28.6139, 77.2090]
+  },
+  {
+    "location": "Lane 5",
+    "mood": "Watched",
+    "color": "yellow",
+    "coords": [28.6200, 77.2100]
+  },
+  {
+    "location": "Old Station",
+    "mood": "Unsafe",
+    "color": "red",
+    "coords": [28.6000, 77.2000]
+  }
+]

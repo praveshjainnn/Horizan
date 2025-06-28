@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Horizon Safety Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
+  <script src="../script.js" defer></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --accent: #3C5759;
+      --frost: rgba(255, 255, 255, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Inter', sans-serif;
+      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+      color: #2c2c2c;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .header-box {
+      background: var(--frost);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 1.2rem 2rem;
+      border-radius: 1.2rem;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .header-box h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: #2c2c2c;
+    }
+
+    .header-box svg {
+      width: 28px;
+      height: 28px;
+      fill: #2c2c2c;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #444;
+      opacity: 0.85;
+      margin-top: 0.3rem;
+    }
+
+    .main-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    .left-content {
+      flex: 1 1 55%;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(14px);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+
+    .right-map {
+      flex: 1 1 40%;
+      min-width: 300px;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    #map {
+      height: 400px;
+      width: 100%;
+      border-radius: 0.8rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .alerts-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 220px;
+      overflow-y: auto;
+      margin-bottom: 2rem;
+    }
+
+    .alert-item {
+      background: white;
+      border-radius: 0.8rem;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      font-size: 0.9rem;
+    }
+
+    .tip-card {
+      background: #fff;
+      padding: 1.2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      font-size: 0.9rem;
+    }
+
+    .tip-card ul {
+      padding-left: 1rem;
+      list-style: disc;
+      color: #333;
+    }
+
+    .report-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 0.75rem 1.2rem;
+      border-radius: 1rem;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 0.8rem;
+      font-size: 0.9rem;
+      border-radius: 0.5rem;
+      margin: 1rem auto 0;
+      width: fit-content;
+    }
+
+    .dot {
+      height: 12px;
+      width: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .green { background: green; }
+    .orange { background: orange; }
+    .red { background: red; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-box">
+      <h1>
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5 14.5 7.6 14.5 9 13.4 11.5 12 11.5z"/>
+        </svg>
+        Horizon Safety Map
+      </h1>
+      <p class="subtitle">Real-time safety check-ins around you</p>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <div class="left-content">
+      <div class="section-title">Community Alerts</div>
+      <div id="alerts-feed" class="alerts-feed">
+        <!-- JS will populate -->
+      </div>
+
+      <div class="section-title">Safety Tips</div>
+      <div class="tip-card">
+        <ul>
+          <li>Stay in well-lit areas.</li>
+          <li>Share your live location with someone.</li>
+          <li>Keep emergency numbers on speed dial.</li>
+          <li>Use verified apps for transport.</li>
+        </ul>
+        <a href="checkin.html" class="report-btn">+ Report Mood</a>
+      </div>
+    </div>
+
+    <div class="right-map">
+      <div id="map">Map loading...</div>
+      <div class="legend">
+        <span><span class="dot green"></span> Safe</span>
+        <span><span class="dot orange"></span> Caution</span>
+        <span><span class="dot red"></span> Avoid</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = () => {
+      const feed = document.getElementById("alerts-feed");
+      const checkins = JSON.parse(localStorage.getItem("checkins") || "[]").reverse().slice(0, 5);
+
+      feed.innerHTML = checkins.length
+        ? checkins.map(entry => `
+          <div class="alert-item">
+            <strong>${entry.mood.toUpperCase()}</strong> – ${entry.note || "No note"}
+            <div style="font-size: 0.8rem; color: gray;">${new Date(entry.timestamp).toLocaleString()}</div>
+          </div>
+        `).join('')
+        : `<p>No recent alerts yet.</p>`;
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Horizon</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #3C5759;
+      --glass-bg: rgba(255, 255, 255, 0.25);
+      --glass-border: rgba(255, 255, 255, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'General Sans', sans-serif;
+      min-height: 100vh;
+      background: url('https://images.pexels.com/photos/2331884/pexels-photo-2331884.jpeg') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      color: #333;
+    }
+
+    .login-container h2 {
+      color: var(--primary);
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      margin: 0.6rem 0;
+      border-radius: 0.8rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: rgba(255,255,255,0.6);
+      font-size: 1rem;
+      transition: 0.3s ease;
+    }
+
+    .login-form input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255,255,255,0.8);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.9rem;
+      margin-top: 1rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #2e4647;
+    }
+
+    .social-login {
+      margin-top: 1.2rem;
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+    }
+
+    .social-login button {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 0.8rem;
+      border: none;
+      border-radius: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+
+    .google {
+      background: white;
+      color: #444;
+      border: 1px solid #ccc;
+    }
+
+    .facebook {
+      background: #3b5998;
+      color: white;
+    }
+
+    .google:hover {
+      background: #f2f2f2;
+    }
+
+    .facebook:hover {
+      background: #2d4373;
+    }
+
+    .login-container p {
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .login-container a {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+      .login-container {
+        padding: 2rem 1.2rem;
+      }
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Welcome Back!</h2>
+    <form class="login-form">
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Password" required />
+      <button type="submit" class="btn">Log In</button>
+
+      <div class="social-login">
+        <button class="google" type="button">
+          <!-- Google SVG -->
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.805 10.023h-9.01v3.953h5.267c-.23 1.204-1.384 3.528-5.267 3.528-3.176 0-5.774-2.64-5.774-5.866 0-3.224 2.598-5.862 5.774-5.862 1.808 0 3.02.77 3.715 1.439l2.536-2.473C17.405 2.898 15.023 2 12 2 6.486 2 2 6.486 2 12s4.486 10 10 10c5.796 0 9.655-4.053 9.655-9.73 0-.66-.076-1.16-.173-1.247z"/></svg>
+          Google
+        </button>
+        <button class="facebook" type="button">
+          <!-- Facebook SVG -->
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.877v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 16.991 22 12z"/></svg>
+          Facebook
+        </button>
+      </div>
+      <p>New here? <a href="#">Sign up</a></p>
+    </form>
+  </div>
+</body>
+</html>

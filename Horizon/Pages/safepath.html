@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🚶‍♀️ Safe Routes - Horizon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --accent: #ff8ba7;
+      --accent-dark: #ff5c7a;
+      --frost: rgba(255, 255, 255, 0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'General Sans', sans-serif;
+      background: url('https://w0.peakpx.com/wallpaper/482/898/HD-wallpaper-landscape-view-of-white-covered-mountains-under-white-cloudy-sky-and-fog-covered-forest-nature.jpg') no-repeat center center/cover;
+      color: #fff;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+
+    header {
+      z-index: 1;
+      backdrop-filter: blur(16px);
+      background: var(--frost);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      background: linear-gradient(to right, #ffa6a6, #ffdcdc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .main-content {
+      z-index: 1;
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      padding: 1.5rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    label {
+      font-weight: 600;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"] {
+      padding: 0.75rem 1rem;
+      border-radius: 0.8rem;
+      border: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 1rem;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #ddd;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      padding: 0.85rem 1.2rem;
+      border: none;
+      border-radius: 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 4px 16px rgba(255, 91, 123, 0.4);
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    #map {
+      height: 400px;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 1.2rem;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #map {
+        height: 300px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🚶‍♀️ Safe Route Finder</h1>
+  </header>
+
+  <div class="main-content">
+    <form id="routeForm">
+      <input type="hidden" id="start" /> <!-- Hidden from user -->
+
+      <label for="end">Destination</label>
+      <input type="text" id="end" placeholder="e.g., India Gate" required />
+
+      <button type="submit">Find Safe Route</button>
+    </form>
+
+    <div id="map">Map loading...</div>
+  </div>
+
+  <script>
+    let map;
+    let startCoords = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      map = L.map("map").setView([28.6139, 77.2090], 13);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors"
+      }).addTo(map);
+
+      // Get user location automatically
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          startCoords = [pos.coords.latitude, pos.coords.longitude];
+        }, () => {
+          alert("Could not access your location. Please allow location access.");
+        });
+      }
+    });
+
+    document.getElementById("routeForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!startCoords) {
+        alert("Still trying to fetch your location… please wait.");
+        return;
+      }
+
+      const endInput = document.getElementById("end").value;
+      const endCoords = await geocode(endInput);
+
+      if (!endCoords) {
+        alert("Destination not found. Please try a different place.");
+        return;
+      }
+
+      // Remove old stuff
+      map.eachLayer(layer => {
+        if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+          map.removeLayer(layer);
+        }
+      });
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors"
+      }).addTo(map);
+
+      // Show route
+      L.marker(startCoords).addTo(map).bindPopup("You").openPopup();
+      L.marker(endCoords).addTo(map).bindPopup("Destination");
+
+      const route = L.polyline([startCoords, endCoords], {
+        color: "#4caf50",
+        weight: 5,
+        opacity: 0.8
+      }).addTo(map);
+
+      map.fitBounds(route.getBounds());
+    });
+
+    async function geocode(query) {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      if (data.length > 0) {
+        return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+      }
+      return null;
+    }
+  </script>
+</body>
+</html>

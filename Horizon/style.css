@@ -1,0 +1,122 @@
+/* style.css - Clean, modern, accessible, pastel/glassmorphism look */
+:root {
+  --primary: #4ecdc4;
+  --accent: #7ed6fb;
+  --bg-gradient: linear-gradient(120deg, #f9f586 0%, #a1c4fd 40%, #c2ffd8 70%, #fbc2eb 100%);
+  --card-bg: rgba(255,255,255,0.92);
+  --card-shadow: 0 6px 24px rgba(126,214,251,0.08);
+  --text-main: #111;
+  --text-accent: #4ecdc4;
+  --border-radius: 1.2rem;
+}
+body {
+  font-family: 'General Sans', sans-serif;
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  margin: 0;
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+nav {
+  width: 100%;
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+nav a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0.4rem 1rem;
+  border-radius: 0.7rem;
+  transition: background 0.2s, color 0.2s;
+}
+nav a:hover, nav a.active {
+  background: var(--accent);
+  color: #fff;
+}
+footer {
+  width: 100%;
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  padding: 1.2rem 0;
+  text-align: center;
+  color: #888;
+  font-size: 1rem;
+  margin-top: 2rem;
+}
+.container {
+  max-width: 900px;
+  width: 100%;
+  margin: 2.5rem auto 0 auto;
+  padding: 2rem 1rem;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  position: relative;
+}
+.card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem 1.2rem;
+  margin-bottom: 1.2rem;
+  color: var(--text-main);
+}
+.btn, button {
+  background: linear-gradient(90deg, #7ed6fb, #fbc2eb, #f9f586);
+  color: var(--text-main);
+  font-weight: 700;
+  border: none;
+  border-radius: 0.8rem;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn:hover, button:hover {
+  background: var(--accent);
+  color: #fff;
+}
+input, select, textarea {
+  padding: 0.8rem 1rem;
+  border-radius: 0.8rem;
+  border: 1px solid #c2ffd8;
+  font-size: 1rem;
+  outline: none;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.sos-btn, #sos-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #fff;
+  color: red;
+  border-radius: 50%;
+  font-weight: bold;
+  padding: 12px 18px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  z-index: 1000;
+  border: none;
+  font-size: 1.2rem;
+  transition: box-shadow 0.2s;
+}
+.sos-btn:hover, #sos-button:hover {
+  box-shadow: 0 0 16px rgba(255,0,0,0.18);
+}
+@media (max-width: 700px) {
+  .container { padding: 1.2rem 0.5rem; }
+  nav { gap: 0.7rem; font-size: 1rem; }
+}
+/* Add more as needed for cards, forms, etc. */

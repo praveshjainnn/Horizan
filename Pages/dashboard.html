@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard - Horizon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'General Sans', sans-serif;
+      background: url('https://cache.desktopnexus.com/thumbseg/2420/2420058-bigthumbnail.jpg') no-repeat center center/cover;
+      min-height: 100vh;
+      margin: 0;
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .dashboard-container {
+      max-width: 1100px;
+      width: 100%;
+      margin: 2.5rem auto;
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dashboard-main,
+    .dashboard-side {
+      backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 1.2rem;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+      padding: 2rem;
+    }
+
+    .dashboard-main {
+      flex: 2;
+      min-width: 320px;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .dashboard-side {
+      flex: 1;
+      min-width: 260px;
+      max-width: 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .glass-card {
+      background: rgba(255,255,255,0.3);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #4ecdc4;
+      margin-bottom: 0.7rem;
+    }
+
+    .user-greeting {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .user-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .user-avatar svg {
+      width: 28px;
+      height: 28px;
+      fill: #4ecdc4;
+    }
+
+    .user-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #4ecdc4;
+    }
+
+    .badges {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .badge {
+      background: #fff;
+      border-radius: 0.7rem;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.98rem;
+      color: #4ecdc4;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: 0.3s ease;
+    }
+
+    .badge:hover {
+      transform: scale(1.05);
+      background-color: #e0f7fa;
+    }
+
+    .checkins-list, .feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .checkin-item, .feed-item {
+      background: #fff;
+      border-radius: 0.7rem;
+      padding: 0.7rem 1rem;
+      color: #444;
+      font-size: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .checkin-mood svg {
+      width: 20px;
+      height: 20px;
+      fill: #4ecdc4;
+    }
+
+    .stat-cards {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 0.7rem;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      color: #4ecdc4;
+      font-size: 1.1rem;
+      font-weight: 700;
+      min-width: 120px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(126, 214, 251, 0.2);
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-container { flex-direction: column; gap: 1.5rem; align-items: center; }
+      .dashboard-main, .dashboard-side { max-width: 98vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="dashboard-side">
+      <div class="glass-card user-greeting">
+        <div class="user-avatar">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5Z"/></svg>
+        </div>
+        <div>
+          <div class="user-name">Hi, Traveler!</div>
+          <div class="badges">
+            <div class="badge">🏅 First Check-in</div>
+            <div class="badge">🎮 Quiz Master</div>
+            <div class="badge">🔥 Streak: 3 days</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-main">
+      <div class="glass-card">
+        <div class="section-title">Recent Check-ins</div>
+        <div class="checkins-list">
+          <div class="checkin-item"><span class="checkin-mood">😊</span> Happy - Paris, 2h ago</div>
+          <div class="checkin-item"><span class="checkin-mood">😐</span> Neutral - Delhi, 1d ago</div>
+          <div class="checkin-item"><span class="checkin-mood">😟</span> Nervous - Tokyo, 3d ago</div>
+        </div>
+      </div>
+      <div class="glass-card">
+        <div class="section-title">Travel Stats</div>
+        <div class="stat-cards">
+          <div class="stat-card">🌍 5 Countries</div>
+          <div class="stat-card">🗺️ 12 Cities</div>
+          <div class="stat-card">🕒 21 Days</div>
+          <div class="stat-card">🏆 3 Badges</div>
+        </div>
+      </div>
+      <div class="glass-card">
+        <div class="section-title">Community Feed</div>
+        <div class="feed-list">
+          <div class="feed-item">Priya: "Just checked in at the Eiffel Tower! Feeling safe and excited."</div>
+          <div class="feed-item">Alex: "Packing tip: always bring a power bank!"</div>
+          <div class="feed-item">Maria: "Loved the travel games on my flight!"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
